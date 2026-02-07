@@ -2,13 +2,20 @@
 
 import { CsvUpload } from "@/components/csv-upload";
 import { CsvPreview } from "@/components/csv-preview";
+import { ExportChatButton } from "@/components/export-chat";
+import { ResizeHandle } from "@/components/resize-handle";
 import { DataFilterPanel } from "@/components/tambo/data-filter-panel";
 import { MessageThreadFull } from "@/components/tambo/message-thread-full";
 import { useMcpServers } from "@/components/tambo/mcp-config-modal";
 import { CsvDataProvider, getCsvDataRef } from "@/lib/csv-context";
 import { components, tools } from "@/lib/tambo";
 import { TamboProvider } from "@tambo-ai/react";
-import { FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet, MessageSquare } from "lucide-react";
+import { useCallback, useState } from "react";
+
+const MIN_PANEL_WIDTH = 280;
+const MAX_PANEL_WIDTH = 900;
+const DEFAULT_PANEL_WIDTH = 480;
 
 /**
  * Context helper that provides CSV metadata to the Tambo agent
@@ -18,7 +25,8 @@ function csvContextHelper() {
   const csvData = getCsvDataRef();
   if (!csvData) {
     return {
-      csvStatus: "No CSV file uploaded yet. Ask the user to upload a CSV or Excel file first.",
+      csvStatus:
+        "No CSV file uploaded yet. Ask the user to upload a CSV or Excel file first.",
     };
   }
 
@@ -41,6 +49,13 @@ function csvContextHelper() {
  */
 function ChatPageContent() {
   const mcpServers = useMcpServers();
+  const [panelWidth, setPanelWidth] = useState(DEFAULT_PANEL_WIDTH);
+
+  const handleResize = useCallback((deltaX: number) => {
+    setPanelWidth((prev) =>
+      Math.min(MAX_PANEL_WIDTH, Math.max(MIN_PANEL_WIDTH, prev + deltaX))
+    );
+  }, []);
 
   return (
     <TamboProvider
@@ -54,8 +69,11 @@ function ChatPageContent() {
       }}
     >
       <div className="h-screen flex">
-        {/* Left Panel - CSV Viewer */}
-        <div className="w-[40%] min-w-[320px] max-w-[600px] border-r border-border flex flex-col bg-background">
+        {/* Left Panel - CSV Viewer (resizable) */}
+        <div
+          className="flex flex-col bg-background border-r border-border"
+          style={{ width: panelWidth, minWidth: MIN_PANEL_WIDTH, maxWidth: MAX_PANEL_WIDTH }}
+        >
           {/* Header */}
           <div className="px-4 py-3 border-b border-border flex items-center gap-2 bg-muted/30">
             <FileSpreadsheet className="h-4 w-4 text-emerald-500" />
@@ -78,9 +96,26 @@ function ChatPageContent() {
           <CsvPreview />
         </div>
 
+        {/* Resize Handle */}
+        <ResizeHandle onResize={handleResize} />
+
         {/* Right Panel - Chat */}
-        <div className="flex-1 min-w-0">
-          <MessageThreadFull className="h-full" />
+        <div className="flex-1 min-w-0 flex flex-col">
+          {/* Chat header with export button */}
+          <div className="px-4 py-2.5 border-b border-border flex items-center justify-between bg-muted/30">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="h-4 w-4 text-blue-500" />
+              <h2 className="text-sm font-semibold text-foreground">
+                AI Analysis
+              </h2>
+            </div>
+            <ExportChatButton />
+          </div>
+
+          {/* Chat thread */}
+          <div className="flex-1 min-h-0">
+            <MessageThreadFull className="h-full" />
+          </div>
         </div>
       </div>
     </TamboProvider>
@@ -89,8 +124,8 @@ function ChatPageContent() {
 
 /**
  * Chat page with split-panel layout.
- * Left: CSV upload, preview, filters.
- * Right: Tambo AI chat for data analysis.
+ * Left: CSV upload, preview, filters (resizable).
+ * Right: Tambo AI chat for data analysis with export.
  */
 export default function Home() {
   return (
