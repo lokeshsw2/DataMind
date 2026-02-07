@@ -1,0 +1,47 @@
+Date,Region,Product,Category,Units Sold,Revenue,Cost,Profit,Customer Rating
+2024-01-15,North,Widget A,Electronics,120,14400,8400,6000,4.5
+2024-01-22,South,Widget B,Electronics,85,12750,7650,5100,4.2
+2024-01-30,East,Gadget X,Home & Garden,200,10000,6000,4000,3.8
+2024-02-05,West,Widget A,Electronics,95,11400,6650,4750,4.6
+2024-02-12,North,Gadget Y,Home & Garden,150,12000,7500,4500,4.1
+2024-02-20,South,Widget C,Clothing,300,9000,5400,3600,3.5
+2024-03-01,East,Widget A,Electronics,110,13200,7700,5500,4.7
+2024-03-10,West,Gadget X,Home & Garden,180,9000,5400,3600,3.9
+2024-03-18,North,Widget B,Electronics,140,21000,12600,8400,4.3
+2024-03-25,South,Gadget Y,Home & Garden,90,7200,4500,2700,4.0
+2024-04-02,East,Widget C,Clothing,250,7500,4500,3000,3.6
+2024-04-10,West,Widget A,Electronics,160,19200,11200,8000,4.8
+2024-04-18,North,Gadget X,Home & Garden,175,8750,5250,3500,4.2
+2024-04-25,South,Widget B,Electronics,130,19500,11700,7800,4.4
+2024-05-03,East,Gadget Y,Home & Garden,110,8800,5500,3300,3.7
+2024-05-12,West,Widget C,Clothing,280,8400,5040,3360,3.4
+2024-05-20,North,Widget A,Electronics,145,17400,10150,7250,4.9
+2024-05-28,South,Gadget X,Home & Garden,165,8250,4950,3300,4.0
+2024-06-05,East,Widget B,Electronics,100,15000,9000,6000,4.1
+2024-06-15,West,Gadget Y,Home & Garden,125,10000,6250,3750,4.3
+2024-06-22,North,Widget C,Clothing,320,9600,5760,3840,3.3
+2024-06-30,South,Widget A,Electronics,135,16200,9450,6750,4.5
+2024-07-08,East,Gadget X,Home & Garden,190,9500,5700,3800,4.1
+2024-07-15,West,Widget B,Electronics,115,17250,10350,6900,4.6
+2024-07-22,North,Gadget Y,Home & Garden,140,11200,7000,4200,3.9
+2024-07-30,South,Widget C,Clothing,270,8100,4860,3240,3.7
+2024-08-05,East,Widget A,Electronics,170,20400,11900,8500,4.7
+2024-08-12,West,Gadget X,Home & Garden,155,7750,4650,3100,3.8
+2024-08-20,North,Widget B,Electronics,125,18750,11250,7500,4.5
+2024-08-28,South,Gadget Y,Home & Garden,105,8400,5250,3150,4.2
+2024-09-04,East,Widget C,Clothing,310,9300,5580,3720,3.5
+2024-09-12,West,Widget A,Electronics,180,21600,12600,9000,4.8
+2024-09-20,North,Gadget X,Home & Garden,200,10000,6000,4000,4.3
+2024-09-28,South,Widget B,Electronics,150,22500,13500,9000,4.6
+2024-10-05,East,Gadget Y,Home & Garden,130,10400,6500,3900,4.0
+2024-10-15,West,Widget C,Clothing,290,8700,5220,3480,3.6
+2024-10-22,North,Widget A,Electronics,155,18600,10850,7750,4.9
+2024-10-30,South,Gadget X,Home & Garden,185,9250,5550,3700,4.1
+2024-11-08,East,Widget B,Electronics,120,18000,10800,7200,4.4
+2024-11-15,West,Gadget Y,Home & Garden,145,11600,7250,4350,4.2
+2024-11-22,North,Widget C,Clothing,340,10200,6120,4080,3.4
+2024-11-30,South,Widget A,Electronics,165,19800,11550,8250,4.6
+2024-12-05,East,Gadget X,Home & Garden,210,10500,6300,4200,4.3
+2024-12-12,West,Widget B,Electronics,135,20250,12150,8100,4.5
+2024-12-20,North,Gadget Y,Home & Garden,160,12800,8000,4800,4.1
+2024-12-28,South,Widget C,Clothing,330,9900,5940,3960,3.8
