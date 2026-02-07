@@ -5,12 +5,14 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  ChevronDown,
   Hash,
   Type,
   Calendar,
   Filter,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 const MAX_DISPLAY_ROWS = 500;
 
@@ -77,6 +79,7 @@ function applyFilters(rows: Row[], filters: ActiveFilter[]): Row[] {
 export function CsvPreview() {
   const { data, activeFilters } = useCsvData();
   const [sort, setSort] = useState<SortConfig>(null);
+  const [columnsExpanded, setColumnsExpanded] = useState(false);
 
   const filteredAndSortedRows = useMemo(() => {
     if (!data) return [];
@@ -137,17 +140,35 @@ export function CsvPreview() {
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
-      {/* Column info bar */}
-      <div className="flex items-center gap-2 px-3 py-2 border-b border-border text-xs text-muted-foreground flex-wrap">
-        {data.headers.map((header) => (
-          <span
-            key={header}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted"
-          >
-            <ColumnTypeIcon type={data.columnTypes[header]} />
-            {header}
+      {/* Collapsible column info bar */}
+      <div className="border-b border-border">
+        <button
+          onClick={() => setColumnsExpanded((v) => !v)}
+          className="w-full flex items-center justify-between px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted/30 transition-colors"
+        >
+          <span className="font-medium">
+            Columns ({data.headers.length})
           </span>
-        ))}
+          <ChevronDown
+            className={cn(
+              "h-3.5 w-3.5 transition-transform duration-200",
+              !columnsExpanded && "-rotate-90"
+            )}
+          />
+        </button>
+        {columnsExpanded && (
+          <div className="flex items-center gap-1.5 px-3 pb-2 flex-wrap">
+            {data.headers.map((header) => (
+              <span
+                key={header}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-xs"
+              >
+                <ColumnTypeIcon type={data.columnTypes[header]} />
+                {header}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Filter active indicator */}

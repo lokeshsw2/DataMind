@@ -13,9 +13,9 @@ import { TamboProvider } from "@tambo-ai/react";
 import { FileSpreadsheet, MessageSquare } from "lucide-react";
 import { useCallback, useState } from "react";
 
-const MIN_PANEL_WIDTH = 280;
-const MAX_PANEL_WIDTH = 900;
-const DEFAULT_PANEL_WIDTH = 480;
+const MIN_PANEL_WIDTH = 320;
+const MAX_PANEL_WIDTH = 1100;
+const DEFAULT_PANEL_WIDTH = 600;
 
 /**
  * Context helper that provides CSV metadata to the Tambo agent
