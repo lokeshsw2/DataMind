@@ -1,6 +1,6 @@
-# DataMind - Chat with Your Spreadsheets
+# DataMind - Chat with Your Data
 
-> **Turn any CSV or Excel file into an interactive AI-powered analytics dashboard in seconds.**
+> **Turn any CSV or Excel file into an interactive AI-powered analysis in seconds.**
 
 DataMind lets you upload a spreadsheet and have a natural-language conversation with your data. Ask questions, generate charts, filter rows, compute statistics, and export polished reports - all without writing a single formula or query.
 
