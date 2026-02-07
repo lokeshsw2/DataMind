@@ -10,9 +10,9 @@ Built with **[Tambo AI](https://tambo.co)** for the [WeMakeDevs x Tambo "The UI 
 
 ## Demo
 
-> **[Live Demo](#)** | **[YouTube Demo (3 min)](#)**
+> **[Live Demo](#)** | **[YouTube Demo (3 min)](https://www.youtube.com/watch?v=mcgu14biioM)**
 
-<!-- Replace # with your actual deployed URL and YouTube link -->
+<!-- Replace the Live Demo link with your deployed URL when ready -->
 
 ---
 
