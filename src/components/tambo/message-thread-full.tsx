@@ -11,10 +11,13 @@ import {
 } from "@/components/tambo/message-input";
 import {
   MessageSuggestions,
-  MessageSuggestionsList,
   MessageSuggestionsStatus,
 } from "@/components/tambo/message-suggestions";
 import { ScrollableMessageContainer } from "@/components/tambo/scrollable-message-container";
+import {
+  SummarizeDataButton,
+  VisualizeDataButton,
+} from "@/components/tambo/quick-action-buttons";
 import {
   AddSelectionContextButton,
   ContextAttachmentBadges,
@@ -33,9 +36,81 @@ import {
   ThreadHistorySearch,
 } from "@/components/tambo/thread-history";
 import { useMergeRefs } from "@/lib/thread-hooks";
-import type { Suggestion } from "@tambo-ai/react";
+import { cn } from "@/lib/utils";
+import { useTamboThread, useTamboThreadInput } from "@tambo-ai/react";
 import type { VariantProps } from "class-variance-authority";
+import { BarChart3, Database, Search, TrendingUp } from "lucide-react";
 import * as React from "react";
+
+// ---------------------------------------------------------------------------
+// Initial suggestions shown once above the input when chat is empty
+// ---------------------------------------------------------------------------
+
+const initialQueries = [
+  {
+    icon: Database,
+    label: "Show data overview",
+    prompt: "Give me an overview of the dataset with key statistics and column summaries.",
+  },
+  {
+    icon: BarChart3,
+    label: "Visualize trends",
+    prompt: "Create charts that highlight the most interesting trends and distributions in this data.",
+  },
+  {
+    icon: TrendingUp,
+    label: "Find top performers",
+    prompt: "Which categories or items have the highest and lowest values? Show me a comparison.",
+  },
+  {
+    icon: Search,
+    label: "Data quality check",
+    prompt: "Check the data quality — are there missing values, outliers, or inconsistencies?",
+  },
+];
+
+function InitialSuggestions() {
+  const { thread } = useTamboThread();
+  const { setValue, submit } = useTamboThreadInput();
+
+  const hasMessages = (thread?.messages?.length ?? 0) > 0;
+  if (hasMessages) return null;
+
+  const handleClick = async (prompt: string) => {
+    setValue(prompt);
+    await new Promise((r) => setTimeout(r, 50));
+    await submit({ streamResponse: true, resourceNames: {} });
+  };
+
+  return (
+    <div className="px-4 pb-3">
+      <p className="text-xs text-muted-foreground mb-2 font-medium">
+        Quick start — try one of these:
+      </p>
+      <div className="grid grid-cols-2 gap-2">
+        {initialQueries.map((q) => (
+          <button
+            key={q.label}
+            type="button"
+            onClick={() => handleClick(q.prompt)}
+            className={cn(
+              "flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs text-left",
+              "border border-border bg-background",
+              "hover:bg-muted hover:border-foreground/20 transition-colors cursor-pointer",
+            )}
+          >
+            <q.icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span className="font-medium text-foreground">{q.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// MessageThreadFull
+// ---------------------------------------------------------------------------
 
 /**
  * Props for the MessageThreadFull component
@@ -68,27 +143,6 @@ export const MessageThreadFull = React.forwardRef<
     </ThreadHistory>
   );
 
-  const defaultSuggestions: Suggestion[] = [
-    {
-      id: "suggestion-1",
-      title: "Get started",
-      detailedSuggestion: "What can you help me with?",
-      messageId: "welcome-query",
-    },
-    {
-      id: "suggestion-2",
-      title: "Learn more",
-      detailedSuggestion: "Tell me about your capabilities.",
-      messageId: "capabilities-query",
-    },
-    {
-      id: "suggestion-3",
-      title: "Examples",
-      detailedSuggestion: "Show me some example queries I can try.",
-      messageId: "examples-query",
-    },
-  ];
-
   return (
     <div className="flex h-full w-full">
       {/* Thread History Sidebar - rendered first if history is on the left */}
@@ -114,6 +168,9 @@ export const MessageThreadFull = React.forwardRef<
         {/* Auto-clear context attachments after submit */}
         <ContextAutoClear />
 
+        {/* One-time initial suggestions above input (only when chat is empty) */}
+        <InitialSuggestions />
+
         {/* Message input */}
         <div className="px-4 pb-4">
           <MessageInput>
@@ -121,6 +178,8 @@ export const MessageThreadFull = React.forwardRef<
             <ContextAttachmentBadges />
             <MessageInputTextarea placeholder="Type your message or paste images..." />
             <MessageInputToolbar>
+              <SummarizeDataButton />
+              <VisualizeDataButton />
               <AddSelectionContextButton />
               <MessageInputMcpConfigButton />
               <MessageInputSubmitButton />
@@ -128,11 +187,6 @@ export const MessageThreadFull = React.forwardRef<
             <MessageInputError />
           </MessageInput>
         </div>
-
-        {/* Message suggestions */}
-        <MessageSuggestions initialSuggestions={defaultSuggestions}>
-          <MessageSuggestionsList />
-        </MessageSuggestions>
       </ThreadContainer>
 
       {/* Thread History Sidebar - rendered last if history is on the right */}

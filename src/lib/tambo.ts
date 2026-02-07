@@ -45,6 +45,7 @@ export const tools: TamboTool[] = [
     description:
       "Get statistical summary for a numeric column in the uploaded CSV data. Returns count, min, max, mean, median, standard deviation, null count, and unique count.",
     tool: getColumnStats,
+    maxCalls: 20,
     inputSchema: z.object({
       column: z.string().describe("The column name to compute statistics for"),
     }),
@@ -65,6 +66,7 @@ export const tools: TamboTool[] = [
     description:
       "Query and filter rows from the uploaded CSV data. Supports filtering by column conditions (equals, contains, gt, lt, gte, lte, notEquals), column selection, sorting, and pagination. Use this to find specific subsets of data.",
     tool: queryData,
+    maxCalls: 20,
     inputSchema: z.object({
       filters: z
         .array(
@@ -117,6 +119,7 @@ export const tools: TamboTool[] = [
     description:
       "Get a sample of rows from the uploaded CSV data to understand the data shape, column names, types, and example values. Always call this first before doing analysis to understand the data structure.",
     tool: getDataSample,
+    maxCalls: 20,
     inputSchema: z.object({
       numRows: z
         .number()
@@ -135,6 +138,7 @@ export const tools: TamboTool[] = [
     description:
       "Get unique values and their counts for a specific column. Useful for understanding categorical data, finding most/least common values, and data distribution.",
     tool: getColumnValues,
+    maxCalls: 20,
     inputSchema: z.object({
       column: z.string().describe("Column name to get unique values for"),
       limit: z
@@ -159,6 +163,7 @@ export const tools: TamboTool[] = [
     description:
       "Group data by a column and aggregate another column with operations like sum, avg, count, min, max. Perfect for creating chart data (e.g. revenue by category, count by month).",
     tool: aggregateData,
+    maxCalls: 20,
     inputSchema: z.object({
       groupBy: z.string().describe("Column to group rows by"),
       aggregateColumn: z
