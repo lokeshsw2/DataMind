@@ -39,7 +39,7 @@ import { useMergeRefs } from "@/lib/thread-hooks";
 import { cn } from "@/lib/utils";
 import { useTamboThread, useTamboThreadInput } from "@tambo-ai/react";
 import type { VariantProps } from "class-variance-authority";
-import { BarChart3, Database, Search, TrendingUp } from "lucide-react";
+import { Database, Filter, Search, TrendingUp } from "lucide-react";
 import * as React from "react";
 
 // ---------------------------------------------------------------------------
@@ -53,9 +53,9 @@ const initialQueries = [
     prompt: "Give me an overview of the dataset with key statistics and column summaries.",
   },
   {
-    icon: BarChart3,
-    label: "Visualize trends",
-    prompt: "Create charts that highlight the most interesting trends and distributions in this data.",
+    icon: Filter,
+    label: "Filter data",
+    prompt: "Filter the data to only show Electronics products from the North region.",
   },
   {
     icon: TrendingUp,
