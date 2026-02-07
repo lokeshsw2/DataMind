@@ -18,6 +18,7 @@ import { ScrollableMessageContainer } from "@/components/tambo/scrollable-messag
 import {
   AddSelectionContextButton,
   ContextAttachmentBadges,
+  ContextAutoClear,
 } from "@/components/tambo/selection-context";
 import { ThreadContainer, useThreadContainerContext } from "./thread-container";
 import {
@@ -109,6 +110,9 @@ export const MessageThreadFull = React.forwardRef<
         <MessageSuggestions>
           <MessageSuggestionsStatus />
         </MessageSuggestions>
+
+        {/* Auto-clear context attachments after submit */}
+        <ContextAutoClear />
 
         {/* Message input */}
         <div className="px-4 pb-4">

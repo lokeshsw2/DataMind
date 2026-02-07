@@ -12,7 +12,61 @@ import {
 import { cn } from "@/lib/utils";
 import { type TamboThreadMessage, useTambo } from "@tambo-ai/react";
 import { type VariantProps } from "class-variance-authority";
+import { Quote } from "lucide-react";
 import * as React from "react";
+
+/**
+ * Extracts context attachments of type "selected-text" from a message's additionalContext.
+ */
+function getQuotedContexts(
+  message: TamboThreadMessage,
+): { context: string; displayName?: string }[] {
+  const additional = message.additionalContext as
+    | Record<string, unknown>
+    | undefined;
+  if (!additional) return [];
+
+  const attachments = additional.contextAttachments;
+  if (!Array.isArray(attachments)) return [];
+
+  return attachments.filter(
+    (a): a is { context: string; displayName?: string; type?: string } =>
+      typeof a === "object" &&
+      a !== null &&
+      typeof (a as Record<string, unknown>).context === "string" &&
+      (a as Record<string, unknown>).type === "selected-text",
+  );
+}
+
+/**
+ * Renders quoted context text above the user's message content.
+ * Only displays for user messages that have selected-text context attachments.
+ */
+function MessageQuotedContext({ message }: { message: TamboThreadMessage }) {
+  const contexts = getQuotedContexts(message);
+  if (contexts.length === 0) return null;
+
+  return (
+    <div className="flex flex-col gap-1 mb-1">
+      {contexts.map((ctx, i) => (
+        <div
+          key={i}
+          className={cn(
+            "flex items-start gap-2 rounded-2xl px-4 py-2 text-xs",
+            "bg-blue-50 dark:bg-blue-950/30",
+            "border-l-2 border-blue-400 dark:border-blue-500",
+            "text-blue-700 dark:text-blue-300",
+          )}
+        >
+          <Quote className="h-3 w-3 mt-0.5 shrink-0 opacity-60" />
+          <span className="italic leading-relaxed line-clamp-3">
+            {ctx.context}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 /**
  * @typedef ThreadContentContextValue
@@ -165,6 +219,9 @@ const ThreadContentMessages = React.forwardRef<
               >
                 <ReasoningInfo />
                 <MessageImages />
+                {message.role === "user" && (
+                  <MessageQuotedContext message={message} />
+                )}
                 <MessageContent
                   className={
                     message.role === "assistant"

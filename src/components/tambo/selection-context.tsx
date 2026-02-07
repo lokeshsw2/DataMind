@@ -7,6 +7,7 @@ import {
 } from "@/components/tambo/suggestions-tooltip";
 import {
   useTamboContextAttachment,
+  useTamboThread,
   type ContextAttachment,
 } from "@tambo-ai/react";
 import { X, Quote } from "lucide-react";
@@ -128,4 +129,34 @@ function ContextBadge({
       </button>
     </span>
   );
+}
+
+/**
+ * Invisible component that watches for new messages and auto-clears context
+ * attachments after the user's message is sent.
+ */
+export function ContextAutoClear() {
+  const { thread } = useTamboThread();
+  const { attachments, clearContextAttachments } = useTamboContextAttachment();
+  const prevMessageCountRef = React.useRef(thread.messages?.length ?? 0);
+  const hadAttachmentsRef = React.useRef(false);
+
+  // Track whether we had attachments when submitting
+  React.useEffect(() => {
+    if (attachments.length > 0) {
+      hadAttachmentsRef.current = true;
+    }
+  }, [attachments]);
+
+  // When a new message appears and we had attachments, clear them
+  React.useEffect(() => {
+    const currentCount = thread.messages?.length ?? 0;
+    if (currentCount > prevMessageCountRef.current && hadAttachmentsRef.current) {
+      clearContextAttachments();
+      hadAttachmentsRef.current = false;
+    }
+    prevMessageCountRef.current = currentCount;
+  }, [thread.messages?.length, clearContextAttachments]);
+
+  return null;
 }
