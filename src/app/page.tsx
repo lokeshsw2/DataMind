@@ -103,7 +103,7 @@ export default function Home() {
 
             <div className="space-y-3">
               <h1 className="text-4xl sm:text-5xl font-bold text-foreground tracking-tight">
-                CSV Insight Chat
+                Data<span className="text-transparent bg-clip-text bg-linear-to-r from-violet-500 to-emerald-500">Mind</span>
               </h1>
               <p className="text-muted-foreground max-w-lg text-base leading-relaxed mx-auto">
                 Upload your CSV or Excel file, then chat with AI to generate

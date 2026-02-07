@@ -16,7 +16,7 @@ function threadToMarkdown(
   const lines: string[] = [];
   const now = new Date().toLocaleString();
 
-  lines.push(`# ${threadName || "CSV Analysis Report"}`);
+  lines.push(`# ${threadName || "DataMind Report"}`);
   lines.push("");
   lines.push(`> Generated on ${now}`);
   lines.push("");
@@ -80,7 +80,7 @@ function threadToHtml(
   threadName?: string
 ): string {
   const now = new Date().toLocaleString();
-  const title = threadName || "CSV Analysis Report";
+  const title = threadName || "DataMind Report";
 
   const messageHtml = messages
     .filter((m) => m.role !== "tool")
@@ -182,7 +182,7 @@ async function exportChatAsPdf(threadName?: string) {
     return;
   }
 
-  const title = threadName || "CSV Analysis Report";
+  const title = threadName || "DataMind Report";
   const timestamp = new Date().toISOString().slice(0, 10);
   const safeFileName = title
     .replace(/[^a-zA-Z0-9 ]/g, "")
@@ -342,7 +342,7 @@ export function ExportChatButton({ className }: { className?: string }) {
     (format: "md" | "html") => {
       if (!hasMessages) return;
 
-      const threadName = thread?.name || "CSV Analysis Report";
+      const threadName = thread?.name || "DataMind Report";
       const timestamp = new Date().toISOString().slice(0, 10);
       const safeFileName = threadName
         .replace(/[^a-zA-Z0-9 ]/g, "")
@@ -371,7 +371,7 @@ export function ExportChatButton({ className }: { className?: string }) {
     setShowMenu(false);
 
     try {
-      const threadName = thread?.name || "CSV Analysis Report";
+      const threadName = thread?.name || "DataMind Report";
       await exportChatAsPdf(threadName);
       setExported("pdf");
       setTimeout(() => setExported(null), 2000);

@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "DataMind - Chat with Your Spreadsheets",
+  description:
+    "Upload CSV or Excel files and chat with AI to generate charts, summaries, and deep insights from your data.",
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
