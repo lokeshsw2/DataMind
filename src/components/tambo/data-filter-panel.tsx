@@ -46,7 +46,7 @@ const operatorLabels: Record<string, string> = {
  * Users can set filters manually, or the AI can update them via chat.
  */
 function DataFilterPanelBase(props: FilterPanelProps) {
-  const { data } = useCsvData();
+  const { data, setActiveFilters } = useCsvData();
   const [filters, setFilters] = useState<FilterItem[]>(props.filters || []);
   const [isAdding, setIsAdding] = useState(false);
   const [newFilter, setNewFilter] = useState<FilterItem>({
@@ -54,6 +54,11 @@ function DataFilterPanelBase(props: FilterPanelProps) {
     operator: "equals",
     value: "",
   });
+
+  // Sync local filters to shared context (runs after render, avoids setState-during-render)
+  useEffect(() => {
+    setActiveFilters(filters);
+  }, [filters, setActiveFilters]);
 
   // Sync when AI updates props
   useEffect(() => {

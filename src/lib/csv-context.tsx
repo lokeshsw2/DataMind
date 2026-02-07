@@ -14,6 +14,15 @@ export interface CsvData {
 }
 
 /**
+ * A single active filter applied to the data grid
+ */
+export interface ActiveFilter {
+  column: string;
+  operator: "equals" | "contains" | "gt" | "lt" | "gte" | "lte" | "notEquals";
+  value: string;
+}
+
+/**
  * Context value for sharing CSV data across the app
  */
 interface CsvContextValue {
@@ -22,6 +31,8 @@ interface CsvContextValue {
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
   clearData: () => void;
+  activeFilters: ActiveFilter[];
+  setActiveFilters: (filters: ActiveFilter[]) => void;
 }
 
 const CsvContext = createContext<CsvContextValue | null>(null);
@@ -46,20 +57,31 @@ export function setCsvDataRef(data: CsvData | null) {
 export function CsvDataProvider({ children }: { children: React.ReactNode }) {
   const [data, setDataState] = useState<CsvData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
 
   const setData = useCallback((newData: CsvData | null) => {
     setDataState(newData);
     setCsvDataRef(newData); // keep module-level ref in sync for tools
+    setActiveFilters([]); // clear filters when new data is loaded
   }, []);
 
   const clearData = useCallback(() => {
     setDataState(null);
     setCsvDataRef(null);
+    setActiveFilters([]);
   }, []);
 
   return (
     <CsvContext.Provider
-      value={{ data, setData, isLoading, setIsLoading, clearData }}
+      value={{
+        data,
+        setData,
+        isLoading,
+        setIsLoading,
+        clearData,
+        activeFilters,
+        setActiveFilters,
+      }}
     >
       {children}
     </CsvContext.Provider>

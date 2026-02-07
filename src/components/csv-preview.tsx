@@ -1,6 +1,6 @@
 "use client";
 
-import { useCsvData } from "@/lib/csv-context";
+import { useCsvData, type ActiveFilter } from "@/lib/csv-context";
 import {
   ArrowUpDown,
   ArrowUp,
@@ -8,10 +8,13 @@ import {
   Hash,
   Type,
   Calendar,
+  Filter,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
 const MAX_DISPLAY_ROWS = 500;
+
+type Row = Record<string, string | number | null>;
 
 type SortConfig = {
   column: string;
@@ -33,18 +36,58 @@ function ColumnTypeIcon({ type }: { type: "string" | "number" | "date" }) {
 }
 
 /**
+ * Apply active filters to rows
+ */
+function applyFilters(rows: Row[], filters: ActiveFilter[]): Row[] {
+  if (filters.length === 0) return rows;
+
+  return rows.filter((row) =>
+    filters.every((f) => {
+      const val = row[f.column];
+      const strVal = String(val ?? "").toLowerCase();
+      const filterVal = f.value.toLowerCase();
+
+      switch (f.operator) {
+        case "equals":
+          return strVal === filterVal;
+        case "notEquals":
+          return strVal !== filterVal;
+        case "contains":
+          return strVal.includes(filterVal);
+        case "gt":
+          return Number(val) > Number(f.value);
+        case "lt":
+          return Number(val) < Number(f.value);
+        case "gte":
+          return Number(val) >= Number(f.value);
+        case "lte":
+          return Number(val) <= Number(f.value);
+        default:
+          return true;
+      }
+    })
+  );
+}
+
+/**
  * Scrollable data table showing the uploaded CSV data.
- * Supports column sorting. Limited to MAX_DISPLAY_ROWS for performance.
+ * Supports column sorting and active filters from context.
+ * Limited to MAX_DISPLAY_ROWS for performance.
  */
 export function CsvPreview() {
-  const { data } = useCsvData();
+  const { data, activeFilters } = useCsvData();
   const [sort, setSort] = useState<SortConfig>(null);
 
-  const sortedRows = useMemo(() => {
+  const filteredAndSortedRows = useMemo(() => {
     if (!data) return [];
 
-    const rows = data.rows.slice(0, MAX_DISPLAY_ROWS);
+    // Apply filters first
+    let rows = applyFilters(data.rows, activeFilters);
 
+    // Limit for performance
+    rows = rows.slice(0, MAX_DISPLAY_ROWS);
+
+    // Sort
     if (!sort) return rows;
 
     return [...rows].sort((a, b) => {
@@ -64,7 +107,12 @@ export function CsvPreview() {
         ? aStr.localeCompare(bStr)
         : bStr.localeCompare(aStr);
     });
-  }, [data, sort]);
+  }, [data, sort, activeFilters]);
+
+  const totalFilteredCount = useMemo(() => {
+    if (!data) return 0;
+    return applyFilters(data.rows, activeFilters).length;
+  }, [data, activeFilters]);
 
   if (!data) {
     return (
@@ -84,7 +132,8 @@ export function CsvPreview() {
     });
   };
 
-  const truncated = data.totalRows > MAX_DISPLAY_ROWS;
+  const isFiltered = activeFilters.length > 0;
+  const truncated = totalFilteredCount > MAX_DISPLAY_ROWS;
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
@@ -100,6 +149,18 @@ export function CsvPreview() {
           </span>
         ))}
       </div>
+
+      {/* Filter active indicator */}
+      {isFiltered && (
+        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 border-b border-blue-500/20 text-xs text-blue-600 dark:text-blue-400">
+          <Filter className="h-3 w-3" />
+          <span>
+            Showing {totalFilteredCount.toLocaleString()} of{" "}
+            {data.totalRows.toLocaleString()} rows ({activeFilters.length}{" "}
+            filter{activeFilters.length !== 1 ? "s" : ""} active)
+          </span>
+        </div>
+      )}
 
       {/* Scrollable table */}
       <div className="flex-1 overflow-auto">
@@ -132,27 +193,38 @@ export function CsvPreview() {
             </tr>
           </thead>
           <tbody>
-            {sortedRows.map((row, rowIdx) => (
-              <tr
-                key={rowIdx}
-                className="hover:bg-muted/30 transition-colors border-b border-border/50"
-              >
-                <td className="px-3 py-1.5 text-muted-foreground tabular-nums">
-                  {rowIdx + 1}
+            {filteredAndSortedRows.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={data.headers.length + 1}
+                  className="px-3 py-8 text-center text-muted-foreground"
+                >
+                  No rows match the active filters.
                 </td>
-                {data.headers.map((header) => (
-                  <td
-                    key={header}
-                    className="px-3 py-1.5 text-foreground max-w-[200px] truncate"
-                    title={String(row[header] ?? "")}
-                  >
-                    {row[header] !== null && row[header] !== undefined
-                      ? String(row[header])
-                      : ""}
-                  </td>
-                ))}
               </tr>
-            ))}
+            ) : (
+              filteredAndSortedRows.map((row, rowIdx) => (
+                <tr
+                  key={rowIdx}
+                  className="hover:bg-muted/30 transition-colors border-b border-border/50"
+                >
+                  <td className="px-3 py-1.5 text-muted-foreground tabular-nums">
+                    {rowIdx + 1}
+                  </td>
+                  {data.headers.map((header) => (
+                    <td
+                      key={header}
+                      className="px-3 py-1.5 text-foreground max-w-[200px] truncate"
+                      title={String(row[header] ?? "")}
+                    >
+                      {row[header] !== null && row[header] !== undefined
+                        ? String(row[header])
+                        : ""}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -161,7 +233,7 @@ export function CsvPreview() {
       {truncated && (
         <div className="px-3 py-1.5 text-xs text-muted-foreground border-t border-border bg-muted/50">
           Showing {MAX_DISPLAY_ROWS.toLocaleString()} of{" "}
-          {data.totalRows.toLocaleString()} rows
+          {totalFilteredCount.toLocaleString()} matched rows
         </div>
       )}
     </div>
