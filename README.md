@@ -10,9 +10,7 @@ Built with **[Tambo AI](https://tambo.co)** for the [WeMakeDevs x Tambo "The UI 
 
 ## Demo
 
-> **[Live Demo](#)** | **[YouTube Demo (3 min)](https://www.youtube.com/watch?v=mcgu14biioM)**
-
-<!-- Replace the Live Demo link with your deployed URL when ready -->
+> **[Live Demo](https://data-mind-two.vercel.app/)** | **[YouTube Demo (3 min)](https://www.youtube.com/watch?v=mcgu14biioM)**
 
 ---
 
