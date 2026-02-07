@@ -16,6 +16,19 @@ Built with **[Tambo AI](https://tambo.co)** for the [WeMakeDevs x Tambo "The UI 
 
 ---
 
+## Quick screenshots
+
+| Landing Page | Chat with Data |
+|---|---|
+| ![Landing Page](/public/screenshots/landing_page.png) | ![Chat Interface](/public/screenshots/chat_wth_data.png) |
+
+| Live Filter / Charts | Context Support |
+|---|---|
+| ![Live Filters](/public/screenshots/live_filter_updates.png) | ![Context Support](/public/screenshots/context-support.png) |
+
+> Tip: You can use the included sample files `test-data.csv` or `test-data.xlsx` in the repository for quick testing.
+
+
 ## Table of Contents
 
 - [Features at a Glance](#features-at-a-glance)
@@ -323,15 +336,7 @@ src/
 
 <!-- Add screenshots of your app here -->
 
-| Landing Page | Chat with Data |
-|---|---|
-| ![Landing Page](#) | ![Chat Interface](#) |
-
-| Chart Generation | PDF Export |
-|---|---|
-| ![Charts](#) | ![PDF Export](#) |
-
-<!-- Replace # with actual screenshot paths -->
+<!-- Screenshots moved to top of the README -->
 
 ---
 
