@@ -4,6 +4,7 @@ import type { messageVariants } from "@/components/tambo/message";
 import {
   MessageInput,
   MessageInputError,
+  MessageInputMcpConfigButton,
   MessageInputSubmitButton,
   MessageInputTextarea,
   MessageInputToolbar,
@@ -14,6 +15,10 @@ import {
   MessageSuggestionsStatus,
 } from "@/components/tambo/message-suggestions";
 import { ScrollableMessageContainer } from "@/components/tambo/scrollable-message-container";
+import {
+  AddSelectionContextButton,
+  ContextAttachmentBadges,
+} from "@/components/tambo/selection-context";
 import { ThreadContainer, useThreadContainerContext } from "./thread-container";
 import {
   ThreadContent,
@@ -53,7 +58,6 @@ export const MessageThreadFull = React.forwardRef<
 >(({ className, variant, ...props }, ref) => {
   const { containerRef, historyPosition } = useThreadContainerContext();
   const mergedRef = useMergeRefs<HTMLDivElement | null>(ref, containerRef);
-
   const threadHistorySidebar = (
     <ThreadHistory position={historyPosition}>
       <ThreadHistoryHeader />
@@ -109,8 +113,12 @@ export const MessageThreadFull = React.forwardRef<
         {/* Message input */}
         <div className="px-4 pb-4">
           <MessageInput>
+            {/* Context attachment badges (from text selection) */}
+            <ContextAttachmentBadges />
             <MessageInputTextarea placeholder="Type your message or paste images..." />
             <MessageInputToolbar>
+              <AddSelectionContextButton />
+              <MessageInputMcpConfigButton />
               <MessageInputSubmitButton />
             </MessageInputToolbar>
             <MessageInputError />
