@@ -57,7 +57,8 @@ Built with **[Tambo AI](https://tambo.co)** for the [WeMakeDevs x Tambo "The UI 
 | **Smart Suggestions** | AI-generated follow-up suggestions after every response + curated initial prompts. |
 | **Resizable Split Panel** | Adjustable data preview alongside the chat for a true analytics workstation feel. |
 | **Thread History** | Full conversation history with search, so you never lose an insight. |
-| **Dark Mode** | Beautiful dark mode UI with Tailwind CSS v4. |
+| **Dark Mode (upcoming)** | Planned — beautiful dark mode UI coming in a future release. |
+
 
 ---
 
@@ -362,7 +363,7 @@ src/
 - **Privacy-first**: All data processing happens in your browser. Nothing is uploaded to any server.
 - **Zero learning curve**: Just upload and ask. No SQL, no formulas, no pivot tables.
 - **Full Tambo integration**: Showcases every major Tambo AI feature working together in a real, useful application.
-- **Production-quality UX**: Resizable panels, streaming responses, voice input, keyboard shortcuts, dark mode, and polished export options.
+ - **Production-quality UX**: Resizable panels, streaming responses, voice input, keyboard shortcuts, dark mode (upcoming), and polished export options.
 - **Practical utility**: This isn't a demo - it's a tool people would actually use to analyze their spreadsheets.
 
 ---
